@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.util.function.Supplier;
 
 import io.pivotal.literx.domain.User;
+import org.assertj.core.api.Assertions;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -49,7 +50,7 @@ public class Part03StepVerifier {
 		StepVerifier.create(flux)
 				.expectNext("foo")
 				.expectNext("bar")
-				.verifyError(IllegalArgumentException.class);
+				.verifyError(RuntimeException.class);
 	}
 
 //========================================================================================
@@ -59,6 +60,7 @@ public class Part03StepVerifier {
 	void expectSkylerJesseComplete(Flux<User> flux) {
 		StepVerifier.create(flux)
 				.expectNextMatches(user -> user.getUsername().equals("swhite"))
+				.assertNext(user -> Assertions.assertThat(user.getUsername().equals("jpinkman")))
 				.verifyComplete();
 	}
 
